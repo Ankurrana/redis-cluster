@@ -1,0 +1,55 @@
+# Not Working for now
+# Use the config files in conf directory to start redis nodes in separate terminals 
+
+services:
+  redis-cluster-node-0:
+    image: redis
+    command: redis-server /usr/local/etc/redis/redis-0.conf
+    networks:
+      redis_cluster:
+        ipv4_address: 172.18.0.10
+    ports:
+      - "6370:6370"
+      - "16370:16370"
+    volumes:
+      - /Users/ankurrana/Documents/codebase/redis-cluster/conf:/usr/local/etc/redis
+  redis-cluster-node-1:
+    image: redis
+    command: redis-server /usr/local/etc/redis/redis-1.conf
+    networks:
+      redis_cluster:
+        ipv4_address: 172.18.0.11
+    ports:
+      - "6371:6371"
+      - "16371:16371"
+    volumes:
+      - /Users/ankurrana/Documents/codebase/redis-cluster/conf:/usr/local/etc/redis
+  redis-cluster-node-2:
+    image: redis
+    command: redis-server /usr/local/etc/redis/redis-2.conf
+    networks:
+      redis_cluster:
+        ipv4_address: 172.18.0.12
+    ports:
+      - "6372:6372"
+      - "16372:16372"
+    volumes:
+      - /Users/ankurrana/Documents/codebase/redis-cluster/conf:/usr/local/etc/redis
+  # redis-cluster-configure:
+  #   image: redis
+  #   command: /usr/local/etc/redis/redis-cluster-create.sh
+  #   networks:
+  #     - redis_cluster
+  #   depends_on:
+  #     - redis-cluster-node-0
+  #     - redis-cluster-node-1
+  #     - redis-cluster-node-2
+  #   volumes:
+  #     - /Users/ankurrana/Documents/codebase/redis-cluster/conf:/usr/local/etc/redis
+networks:
+  redis_cluster:
+    driver: bridge
+    ipam:
+      config:
+        - subnet:  172.18.0.0/16
+          gateway: 172.18.0.1
